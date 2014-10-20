@@ -15,10 +15,14 @@ Serial.begin(9600); //This initialices the USB as a serial port
 // the loop routine runs over and over again forever:
 void loop() {
   char incomingByte = (char)Serial.read();
-  if(incomingByte=='1')
+  if(incomingByte=='1') {
     digitalWrite(led,HIGH);
-  else if(incomingByte=='0')
+    Serial.write("LED ON");
+  }
+  else if(incomingByte=='0') {
     digitalWrite(led,LOW);
+    Serial.write("LED OFF");
+  }
 }
   
 
