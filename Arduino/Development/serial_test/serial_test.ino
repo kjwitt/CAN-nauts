@@ -17,11 +17,11 @@ void loop() {
   char incomingByte = (char)Serial.read();
   if(incomingByte=='1') {
     digitalWrite(led,HIGH);
-    Serial.write("LED ON");
+    Serial.println("LED ON");
   }
   else if(incomingByte=='0') {
     digitalWrite(led,LOW);
-    Serial.write("LED OFF");
+    Serial.println("LED OFF");
   }
 }
   
