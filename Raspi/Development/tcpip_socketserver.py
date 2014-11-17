@@ -1,16 +1,33 @@
 import SocketServer
 
 class TCPHandler(SocketServer.BaseRequestHandler):
+	def setup(self):
+		print self.client_address, "connected"
 
 	def handle(self):
-		self.data = self.request.recv(1024).strip()
-		print "{} wrote:".format(self.client_address[0])
-		print self.data
-		self.request.sendall(self.data)
+		while True:
+			self.data = self.request.recv(1024)
+			print "{} wrote:".format(self.client_address[0])
+			print self.data.strip()
+			self.request.send(self.data)
+			if self.data.strip() == "close":
+				self.request.close();
+				return			
+
+	def finish(self):
+		print self.client_address, "disconnected"
+		
 
 if __name__ == "__main__":
 	HOST, PORT = "192.168.1.1",8000
+	print "Server established on:",HOST,PORT
+	print 
 
+	SocketServer.TCPServer.allow_reuse_address = True
 	server = SocketServer.TCPServer((HOST, PORT), TCPHandler)
-	
-	server.serve_forever()
+
+	try:
+		server.serve_forever()
+	except KeyboardInterrupt:
+		server.shutdown()
+		server.socket.close()
